@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
 import ValidationComponent from './UserInputOutput/ValidationComponent';
+import CharComponent from './UserInputOutput/CharComponent';
 
 class App extends Component {
   state = {
@@ -12,13 +13,20 @@ class App extends Component {
     ],
     showPersons: false,
     otherState: 'some other value',
-    textLength: 0
+    textLength: 0,
+    typedText: '',
   }
 
   deletePersonHandler = (personIndex) => {
     const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
     this.setState({persons: persons});
+  }
+
+  deleteLetterHandler = (letterIndex) => {
+    const typedText = [...this.state.typedText];
+    typedText.splice(letterIndex, 1);
+    this.setState({typedText: typedText.join('')});
   }
 
   nameChangedHandler = (event, id) => {
@@ -38,18 +46,21 @@ class App extends Component {
   }
 
   textChangedHandler = (event) => {
-    console.log(event.target.value);
-    this.setState({ textLength: event.target.value.length});
+    this.setState({textLength: event.target.value.length});
+    this.setState({typedText: event.target.value});
+    console.log(this.state.typedText);
   }
 
   togglePersonHandler = () => {
     const doesShow = this.state.showPersons;
     this.setState({showPersons: !doesShow});
+    
   }
 
   render () {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
@@ -74,11 +85,29 @@ class App extends Component {
 
       </div>
       );
+      style.backgroundColor = 'red';
+    }
+
+    let chars = null;
+    if (this.state.typedText.length > 0) {
+      let charArray = this.state.typedText.split('');
+      chars = (
+      <div >
+        {
+          charArray.map((char, idx) => {
+            return <CharComponent 
+              character={char + ' ' + idx} 
+              key={idx}
+              click={() => this.deleteLetterHandler(idx)} />
+          })
+        }
+
+      </div>
+      );
     }
 
     return (
       <div className="App">
-
         <h1>Hi, I'm a React App</h1>
         <p>This is really working!</p>
         <button 
@@ -89,6 +118,7 @@ class App extends Component {
           <p>
             <input 
               type="text" 
+              value={this.state.typedText}
               onChange={(event) => this.textChangedHandler(event)} />
             <br />
             <span>{this.state.textLength}</span>
@@ -99,6 +129,8 @@ class App extends Component {
               minLength={5}
               textLength={this.state.textLength} />
           </div>
+
+          {chars}
       </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
