@@ -3,6 +3,21 @@ import './App.css';
 import Person from './Person/Person';
 import ValidationComponent from './UserInputOutput/ValidationComponent';
 import CharComponent from './UserInputOutput/CharComponent';
+import Styled from 'styled-components';
+
+const StyledButton = Styled.button`
+  background-color: ${props => props.alt ? 'red' : 'green' };
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: lightgreen;
+    color: black;
+  }
+`;
 
 class App extends Component {
   state = {
@@ -58,14 +73,14 @@ class App extends Component {
   }
 
   render () {
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    };
+    // const style = {
+    //   backgroundColor: 'green',
+    //   color: 'white',
+    //   font: 'inherit',
+    //   border: '1px solid blue',
+    //   padding: '8px',
+    //   cursor: 'pointer'
+    // };
 
     let persons = null;
 
@@ -85,7 +100,7 @@ class App extends Component {
 
       </div>
       );
-      style.backgroundColor = 'red';
+      //style.backgroundColor = 'red';
     }
 
     let chars = null;
@@ -110,27 +125,29 @@ class App extends Component {
       <div className="App">
         <h1>Hi, I'm a React App</h1>
         <p>This is really working!</p>
-        <button 
-          style={style}
-          onClick={this.togglePersonHandler}>Toggle Persons</button>
-          {persons}
+        <StyledButton alt={this.state.showPersons}
+          //style={style}
+          onClick={this.togglePersonHandler}>Toggle Persons
+        </StyledButton>
+        
+        {persons}
 
-          <p>
-            <input 
-              type="text" 
-              value={this.state.typedText}
-              onChange={(event) => this.textChangedHandler(event)} />
-            <br />
-            <span>{this.state.textLength}</span>
-          </p>
+        <p>
+          <input 
+            type="text" 
+            value={this.state.typedText}
+            onChange={(event) => this.textChangedHandler(event)} />
+          <br />
+          <span>{this.state.textLength}</span>
+        </p>
 
-          <div>
-            <ValidationComponent
-              minLength={5}
-              textLength={this.state.textLength} />
-          </div>
+        <div>
+          <ValidationComponent
+            minLength={5}
+            textLength={this.state.textLength} />
+        </div>
 
-          {chars}
+        {chars}
       </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
