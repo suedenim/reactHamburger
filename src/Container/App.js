@@ -5,6 +5,11 @@ import Cockpit from '../Components/Cockpit/Cockpit'
 import Persons from '../Components/Persons/Persons';
 
 class App extends Component {
+constructor(props){
+  super(props);
+  console.log('[App.js] constructor');
+}
+
   state = {
     persons: [
       { id: 'asfa1', name: 'Max', age: 28 },
@@ -12,8 +17,27 @@ class App extends Component {
       { id: 'asdf11', name: 'Stephanie', age: 26 }
     ],
     otherState: 'some other value',
-    showPersons: false
+    showPersons: false,
+    showCockpit: true,
   };
+
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps ' + JSON.stringify(props));
+    return state;
+  }
+
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('[App.js] shouldComponentUpdate');
+    return true;
+  }
+
+  componentDidUpdate() {
+    console.log('[App.js] componentDidUpdate');
+  }
 
   nameChangedHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex(p => {
@@ -47,6 +71,7 @@ class App extends Component {
   };
 
   render() {
+    console.log('[App.js] render - enter');
     let persons = null;
 
     if (this.state.showPersons) {
@@ -62,11 +87,13 @@ class App extends Component {
 
     return (
       <div className={classes.App}>
-        <Cockpit 
+        <button onClick={() => { this.setState({ showCockpit: false}) } } >Hide Cockpit</button>
+
+        { this.state.showCockpit ? <Cockpit 
           title={this.props.appTitle || "Null prop"}
-          persons={this.state.persons} 
+          personsLength={this.state.persons.length} 
           clicked={this.togglePersonsHandler} 
-          showPersons={this.state.showPersons} />
+          showPersons={this.state.showPersons} /> : null }
         {persons}
       </div>
     );
