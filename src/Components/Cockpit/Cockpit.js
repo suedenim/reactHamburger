@@ -1,4 +1,5 @@
 import React, {useEffect, useRef} from 'react';
+import AuthContext from '../../Context/auth-context';
 
 import classes from './Cockpit.css';
 
@@ -10,7 +11,7 @@ const cockpit = (props) => {
     
         //setTimeout(() => { alert('Data saved!'); }, 1000);
         toggleBtnRef.current.click();
-        
+
         return () => {
             console.log('[Cockpit.js] init/unmount clean up useEffect');
         };
@@ -48,6 +49,11 @@ const cockpit = (props) => {
                 ref={toggleBtnRef}>
                 Toggle Persons
             </button>
+            <AuthContext.Consumer>
+                {
+                    (context) => <button onClick={context.login}>Login</button>
+                }
+            </AuthContext.Consumer>
         </div>
     );
 };
